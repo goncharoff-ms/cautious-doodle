@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -27,10 +29,14 @@ public class AdController {
         adRepo.save(new Ad(title,descriptions,category,numberPhone,date.now()));
         return "redirect:/";
     }
-    @GetMapping("ad/{id}")
-    public String addWithId(@PathVariable(value = "id") Long id, Model model){
+    @GetMapping("/{id}")
+    public String adWithId(@PathVariable(value = "id") Long id, Model model){
         Optional<Ad> ad = adRepo.findById(id);
-        model.addAttribute("ad", ad);
+        List<Ad> adList = new ArrayList();
+        ad.ifPresent(adList::add);
+        model.addAttribute("ad", adList);
         return "ad_details";
     }
+
+
 }
